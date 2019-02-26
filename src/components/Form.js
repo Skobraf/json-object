@@ -53,16 +53,35 @@ export default class Form extends Component {
         };
     }
 
-    updateDocument = (id, value) => {
-        console.log(id, value);
-        const docId = id;
-        this.setState({
-            form: {
-                ...this.state.form,
-                [id]: value
+    updateDocument = (parents, id, value) => {
+        if (parents) {
+            let form = { ...this.state.form };
+            let pointer = form;
+            let path = [...parents, id];
+            let level = 0;
+            while (level < path.length) {
+                if (pointer.hasOwnProperty(id)) {
+                    console.log(value);
+                    pointer[id] = value;
+                    // console.log('should modify', level, pointer);
+                }
+                pointer = pointer[path[level]].value;
+                level++;
             }
-        });
+            this.setState({ ...this.state, form: form });
+        }
     };
+    componentDidMount() {
+        const localStorageRef = localStorage.getItem('myState');
+        this.setState({form: JSON.parse(localStorageRef)});
+    }
+
+    componentDidUpdate() {
+        console.log('updated');
+        console.log(this.state.form);
+        localStorage.setItem('myState', JSON.stringify(this.state.form));
+    };
+    
 
     render() {
         const { form } = this.state;
@@ -74,11 +93,12 @@ export default class Form extends Component {
                     let { name, type, value } = doc;
                     return (
                         <Element
-                            key={name}
+                            key={document}
                             type={type}
                             value={value}
                             name={name}
                             id={document}
+                            parents={false}
                             update={this.updateDocument}
                         />
                     );

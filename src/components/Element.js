@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class Element extends Component {
     handleChange = (event, changeType) => {
         const v = event.target.value;
-        const { type, name, value, id } = this.props;
+        const { type, name, value, id, parents } = this.props;
         const oldDoc = {
             type,
             name,
@@ -14,10 +14,17 @@ export default class Element extends Component {
             [changeType]: v
         };
         // We need to send this doc to the state and update it
-        this.props.update(id, newDoc);
+        this.props.update(parents, id, newDoc);
     };
     render() {
-        const { type, name, value, id } = this.props;
+        const { type, name, value, id, parents } = this.props;
+        const parentsIds = [];
+
+        if (parents == false) {
+            parentsIds.push(id);
+        } else {
+            parentsIds.push(...parents, id);
+        }
         if (type === 'structure') {
             const children = Object.keys(value);
             const structureChildren = children.map(document => {
@@ -25,11 +32,12 @@ export default class Element extends Component {
                 let fieldValue = value[document].value;
                 return (
                     <Element
-                        key={name}
+                        key={document}
                         type={type}
                         value={fieldValue}
                         name={name}
                         id={document}
+                        parents={parentsIds}
                         update={this.props.update}
                     />
                 );
@@ -37,7 +45,7 @@ export default class Element extends Component {
 
             return (
                 <div>
-                    <input type="text" value={name} name={id} />
+                    <input type="text" value={name} name={id} defaultValue="" />
                     <button>Add Child</button>
                     {structureChildren}
                 </div>
@@ -46,15 +54,17 @@ export default class Element extends Component {
             return (
                 <div>
                     <input
+                        key={`${id}-nameinput`}
                         type="text"
                         value={name}
                         onChange={e => this.handleChange(e, 'name')}
-                        name={id}
+                        name={`${id}-name`}
                     />
                     <input
+                        key={`${id}-valueinput`}
                         type="text"
                         value={value}
-                        name={id}
+                        name={`${id}-value`}
                         onChange={e => this.handleChange(e, 'value')}
                     />
                     <select name="" value={type}>
