@@ -1,143 +1,82 @@
-import React, { Component } from 'react';
-import Element from './Element';
+import React from 'react';
 
-export default class Form extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            idGen: 10,
-            form: {
-                'document-id-1': {
-                    type: 'structure',
-                    name: 'document-name-1',
-                    value: {
-                        'document-id-2': {
-                            type: 'text',
-                            name: 'text-field-name',
-                            value: 'text-field-value'
-                        },
-                        'document-id-3': {
-                            type: 'text',
-                            name: 'text-field-name-2',
-                            value: 'text-field-value-1'
-                        }
-                    }
-                },
-                'document-id-4': {
-                    type: 'structure',
-                    name: 'document-name-4',
-                    value: {
-                        'document-id-5': {
-                            type: 'text',
-                            name: 'text-field-name',
-                            value: 'text-field-value'
-                        },
-                        'document-id-6': {
-                            type: 'text',
-                            name: 'text-field-name-2',
-                            value: 'text-field-value-1'
-                        },
-                        'document-id-7': {
-                            type: 'structure',
-                            name: 'document-name-7',
-                            value: {
-                                'document-id-8': {
-                                    type: 'text',
-                                    name: 'text-field-name-8',
-                                    value: 'text-field-value-8'
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        };
-    }
+class Form extends React.Component {
+	statusRef = React.createRef();
+	textRef = React.createRef();
+	valueRef = React.createRef();
+	showVisible = () => {
+		this.setState({visible: false});
+	}
+	toggleVisibility = () => {
+		const json = {
+			statusRef: this.statusRef.current.value,
+			textRef: this.textRef.current.value,
+			valueRef:this.valueRef.current.value
+		}
 
-    updateDocument = (parents, id, value) => {
-        if (parents) {
-            let form = { ...this.state.form };
-            let pointer = form;
-            let path = [...parents, id];
-            let level = 0;
-            while (level < path.length) {
-                if (pointer.hasOwnProperty(id)) {
-                    pointer[id] = value;
-                }
-                pointer = pointer[path[level]].value;
-                level++;
-            }
-            this.setState({ ...this.state, form: form });
-        }
-    };
+		if (this.statusRef.current.value ==="array" || this.statusRef.current.value ==="structure" ) {
+			this.visible = true;
+		}
+		else {this.visible = false;}
+		this.props.updateStructure(json, this.props.index)
+		}
 
-    addChild = (parents, id) => {
-        let form = { ...this.state.form };
-        let pointer = form;
-        let path;
-        if (parents) {
-            path = [...parents, id];
-        } else {
-            path = [id];
-        }
+		
 
-        let level = 0;
-        const newDocument = {
-            type: 'text',
-            name: `text-field-name-${this.state.idGen}`,
-            value: `text-field-value-${this.state.idGen}`
-        };
-        while (level < path.length) {
-            if (pointer.hasOwnProperty(id)) {
-                pointer[id].value = {
-                    ...pointer[id].value,
-                    [`document-id-${this.state.idGen}`]: 'should be doc 9'
-                };
-            }
-            pointer = pointer[path[level]].value;
-            level++;
-        }
-        let idGen = this.state.idGen++;
-        this.setState({
-            ...this.state,
-            idGen: idGen++
-        });
-        this.setState({ ...this.state, idGen: this.state.idGen++, form: form });
-    };
+	render() {
+		if(Array.isArray(this.props.type.type)) {
+			let arr = this.props.type;
+			return (
+				<div>
+					<li onClick={this.showVisible}>
+						<form onSubmit={this.showMe}>
+						<input type="text" placeholder="Text" ref={this.textRef} />
+						<select name="valeur"  ref={this.statusRef} onChange={this.toggleVisibility}>
+							<option value="text">text</option>
+							<option value="boolean">Boolean</option>
+							<option value="number">Number</option>
+							<option value="structure">Structure</option>
+							<option value="array">Array</option>
+							<option value="date">Date</option>
+						</select>
+						<input type="text" placeholder="Value" ref={this.valueRef}  style={{display: this.visible ? 'none' : 'inline-block'}} />
+						<button style={{display: this.visible ? 'inline-block' : 'none'}} type="submit">Add</button>
+					</form>
+					</li>
+					<ul>
+						{arr.type.map((data, i) => {
+							return (
+									<Form
+									key={i}
+									type={data}
+									updateStructure={this.props.updateStructure}
+									index={i}
+								/>
+								)
+						})}
+					</ul>
+				</div>
 
-     componentDidMount() {
-        const localStorageRef = localStorage.getItem('myState');
-        this.setState({form: JSON.parse(localStorageRef)});
-    }
-
-    componentDidUpdate() {
-        console.log('updated');
-        console.log(this.state.form);
-        localStorage.setItem('myState', JSON.stringify(this.state.form));
-    };
-
-    render() {
-        const { form } = this.state;
-        const docs = Object.keys(form);
-        return (
-            <div>
-                {docs.map(document => {
-                    let doc = form[document];
-                    let { name, type, value } = doc;
-                    return (
-                        <Element
-                            key={document}
-                            type={type}
-                            value={value}
-                            name={name}
-                            id={document}
-                            parents={false}
-                            update={this.updateDocument}
-                            add={this.addChild}
-                        />
-                    );
-                })}
-            </div>
-        );
-    }
+				)
+		} else
+			return (
+				<li onClick={this.showVisible}>
+						<form onSubmit={this.showMe}>
+						<input type="text" placeholder="Text" ref={this.textRef} />
+						<select name="valeur"  ref={this.statusRef} onChange={this.toggleVisibility}>
+							<option value="text">text</option>
+							<option value="boolean">Boolean</option>
+							<option value="number">Number</option>
+							<option value="structure">Structure</option>
+							<option value="array">Array</option>
+							<option value="date">Date</option>
+						</select>
+						<input type="text" placeholder="Value" ref={this.valueRef}  style={{display: this.visible ? 'none' : 'inline-block'}} />
+						<button style={{display: this.visible ? 'inline-block' : 'none'}} type="submit">Add</button>
+					</form>
+					</li>
+			)
+	}
 }
+
+export default Form;
