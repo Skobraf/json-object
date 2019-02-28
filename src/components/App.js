@@ -26,7 +26,7 @@ class App extends React.Component {
                         name: "third state",
                         value:"valeur",
                         status: "text",
-                        type:{}
+                        type:"hellow muther fucker"
                                       }
 
                       ]
@@ -35,11 +35,35 @@ class App extends React.Component {
 		},
 		count:0
 		}
-		updateStructure = (json, index) => {
-			let struct = {...this.state.obj['state1']};
+		updateStructure = (json, index, id) => {
+			let struct = {...this.state.obj['state2']};
 			const name = json["textRef"];
 			const value = json["valueRef"];
 			const status = json["statusRef"];
+			function getObject(theObject) {
+				    let result = null;
+				    if(theObject instanceof Array) {
+				        for(let i = 0; i < theObject.length; i++) {
+				            result = getObject(theObject[i]);
+				        }
+				    }
+				    else
+				    {
+				        for(let prop in theObject) {
+				          /*THE KEY YOU WANT TO LOOK FOR*/
+				            if(prop == 'id') {
+				              /* INDEX IS THE VALUE YOU WANT TO ACCESS */
+				                if(theObject[prop] == id) {
+				                    return theObject;
+				                }
+				            }
+				            if(theObject[prop] instanceof Object || theObject[prop] instanceof Array)
+				                result = getObject(theObject[prop]);
+				        }
+				    }
+				    return result;
+				}
+				const result = getObject(struct);
 			switch(status) {
 				case 'array':
 				struct.type = [];
@@ -55,7 +79,7 @@ class App extends React.Component {
 				break;
 				default :
 			}
-			console.log(struct);
+			console.log(result, id);
 
 
 		}

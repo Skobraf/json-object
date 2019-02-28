@@ -18,7 +18,7 @@ class Form extends React.Component {
 			this.visible = true;
 		}
 		else {this.visible = false;}
-		this.props.updateStructure(json, this.props.index)
+		this.props.updateStructure(json, this.props.index,this.props.type.id)
 		}
 
 		
