@@ -132,6 +132,54 @@ class App extends React.Component {
 			// this.setState({obj:k})
 
 		}
+		addStructure = (json, id) => {
+			let struct = {...this.state.obj['state2']};
+			let k = {...this.state.obj};
+			const name = json["textRef"];
+			const value = json["valueRef"];
+			const status = json["statusRef"];
+			function getObject(theObject) {
+				    let result = null;
+				    if(theObject instanceof Array) {
+				        for(let i = 0; i < theObject.length; i++) {
+				            result = getObject(theObject[i]);
+				        }
+				    }
+				    else
+				    {
+				        for(let prop in theObject) {
+				          /*THE KEY YOU WANT TO LOOK FOR*/
+				            if(prop == 'id') {
+				              /* INDEX IS THE VALUE YOU WANT TO ACCESS */
+				                if(theObject[prop] == id) {
+				                    return theObject;
+				                }
+				            }
+				            if(theObject[prop] instanceof Object || theObject[prop] instanceof Array)
+				                result = getObject(theObject[prop]);
+				        }
+				    }
+				    return result;
+				}
+				const result = getObject(struct);
+			switch(status) {
+				case 'array':
+				result.type.push({
+					id:id +1 ,
+        			name: "third state",
+        			value:"valeur",
+        			status: "text",
+        			type:""
+				});
+				break;
+				case 'structure':
+				result.type = {};
+				break;
+				default :
+			}
+			console.log(result);
+			// this.setState({obj:k})
+		}
 
 	render() {
 		return (
@@ -144,6 +192,7 @@ class App extends React.Component {
 								type={this.state.obj[data]}
 								updateStructure={this.updateStructure}
 								updateValues={this.updateValues}
+								addStructure={this.addStructure}
 							 />
 							)
 					})}

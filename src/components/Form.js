@@ -7,6 +7,15 @@ class Form extends React.Component {
 	showVisible = () => {
 		this.setState({visible: false});
 	}
+	handleData = (e) => {
+		e.preventDefault();
+		const json = {
+			statusRef: this.statusRef.current.value,
+			textRef: this.textRef.current.value,
+			valueRef:this.valueRef.current.value
+		}
+		this.props.addStructure(json,this.props.type.id)
+	}
 	handleValues = () => {
 		const json = {
 			statusRef: this.statusRef.current.value,
@@ -37,7 +46,7 @@ class Form extends React.Component {
 			return (
 				<div>
 					<li onClick={this.showVisible}>
-						<form onSubmit={this.showMe}>
+						<form onSubmit={this.handleData}>
 						<input type="text" placeholder="Text" ref={this.textRef} onChange={this.handleValues} />
 						<select name="valeur"  ref={this.statusRef} onChange={this.toggleVisibility}>
 							<option value="text">text</option>
@@ -59,6 +68,7 @@ class Form extends React.Component {
 									type={data}
 									updateStructure={this.props.updateStructure}
 									updateValues={this.props.updateValues}
+									addStructure={this.props.addStructure}
 									index={i}
 								/>
 								)
