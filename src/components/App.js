@@ -4,40 +4,34 @@ import Form  from './Form';
 class App extends React.Component {
 	state = {
 		obj:{
-			state1:{
-				id:0,
-				name: "first state",
-				value:"valeur",
-				status: "text",
-				type: "this is a text"
-			},
 			state2:{
-				id:0,
-				name: "second state",
-				value:"valeur",
-				status: "text",
-				type: [{
-					id:0,
-					name: "array state",
-					value:"valeur",
-					status: "text",
-					type: "this is a text"
-				}]
-			},
-			state3:{
-				id:0,
-				name: "third state",
-				value:"valeur",
-				status: "text",
-				type: {
-					id:1,
-					name: "object state",
-					value:"valeur",
-					status: "text",
-					type: "this is a text"
-				}
-			}
+			        id:0,
+        name: "third state",
+        value:"valeur",
+        status: "text",
+        type: [{
+              id:1,
+              name: "object state",
+              value:"valeur",
+              status: "text",
+              type: [
+                      {
+                        id:2,
+                        name: "third state",
+                        value:"valeur",
+                        status: "text",
+                        type:[]
+                      },{
+                        id:3,
+                        name: "third state",
+                        value:"valeur",
+                        status: "text",
+                        type:{}
+                                      }
 
+                      ]
+        }]
+    }
 		},
 		count:0
 		}
