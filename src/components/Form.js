@@ -7,6 +7,14 @@ class Form extends React.Component {
 	showVisible = () => {
 		this.setState({visible: false});
 	}
+	handleValues = () => {
+		const json = {
+			statusRef: this.statusRef.current.value,
+			textRef: this.textRef.current.value,
+			valueRef:this.valueRef.current.value
+		}
+		this.props.updateValues(json,this.props.type.id)
+	}
 	toggleVisibility = () => {
 		const json = {
 			statusRef: this.statusRef.current.value,
@@ -18,7 +26,7 @@ class Form extends React.Component {
 			this.visible = true;
 		}
 		else {this.visible = false;}
-		this.props.updateStructure(json, this.props.index,this.props.type.id)
+		this.props.updateStructure(json,this.props.type.id)
 		}
 
 		
@@ -30,7 +38,7 @@ class Form extends React.Component {
 				<div>
 					<li onClick={this.showVisible}>
 						<form onSubmit={this.showMe}>
-						<input type="text" placeholder="Text" ref={this.textRef} />
+						<input type="text" placeholder="Text" ref={this.textRef} onChange={this.handleValues} />
 						<select name="valeur"  ref={this.statusRef} onChange={this.toggleVisibility}>
 							<option value="text">text</option>
 							<option value="boolean">Boolean</option>
@@ -39,7 +47,7 @@ class Form extends React.Component {
 							<option value="array">Array</option>
 							<option value="date">Date</option>
 						</select>
-						<input type="text" placeholder="Value" ref={this.valueRef}  style={{display: this.visible ? 'none' : 'inline-block'}} />
+						<input type="text" placeholder="Value" ref={this.valueRef}  style={{display: this.visible ? 'none' : 'inline-block'}} onChange={this.handleValues} />
 						<button style={{display: this.visible ? 'inline-block' : 'none'}} type="submit">Add</button>
 					</form>
 					</li>
@@ -50,6 +58,7 @@ class Form extends React.Component {
 									key={i}
 									type={data}
 									updateStructure={this.props.updateStructure}
+									updateValues={this.props.updateValues}
 									index={i}
 								/>
 								)
@@ -62,7 +71,7 @@ class Form extends React.Component {
 			return (
 				<li onClick={this.showVisible}>
 						<form onSubmit={this.showMe}>
-						<input type="text" placeholder="Text" ref={this.textRef} />
+						<input type="text" placeholder="Text" ref={this.textRef} onChange={this.handleValues} />
 						<select name="valeur"  ref={this.statusRef} onChange={this.toggleVisibility}>
 							<option value="text">text</option>
 							<option value="boolean">Boolean</option>
@@ -71,7 +80,7 @@ class Form extends React.Component {
 							<option value="array">Array</option>
 							<option value="date">Date</option>
 						</select>
-						<input type="text" placeholder="Value" ref={this.valueRef}  style={{display: this.visible ? 'none' : 'inline-block'}} />
+						<input type="text" placeholder="Value" ref={this.valueRef}  style={{display: this.visible ? 'none' : 'inline-block'}} onChange={this.handleValues} />
 						<button style={{display: this.visible ? 'inline-block' : 'none'}} type="submit">Add</button>
 					</form>
 					</li>
