@@ -4,13 +4,7 @@ import Form  from './Form';
 class App extends React.Component {
 	state = {
 		obj:{
-			state2:{
-			        id:0,
-        			name: "third state",
-        			value:"valeur",
-        			status: "text",
-        			type: []
-    }
+			
 		},
 		count:0
 		}
@@ -174,7 +168,13 @@ class App extends React.Component {
 				});
 				break;
 				case 'structure':
-				result.type = {};
+				result.type = {
+							  id:parseInt(id) +1 ,
+        					  name: undefined,
+        					  value:undefined,
+        					  status: "text",
+        					  type:""
+        						};
 				break;
 				default :
 			}
