@@ -9,26 +9,27 @@ class App extends React.Component {
         			name: "third state",
         			value:"valeur",
         			status: "text",
-        			type: [{
-              id:1,
-              name: "object state",
-              value:"valeur",
-              status: "text",
-              type: [
-                      {
-                        id:2,
-                        name: "third state",
-                        value:undefined,
-                        status: "text",
-                        type:[]
-                      }]
-        }]
+        			type: []
     }
 		},
 		count:0
 		}
-		updateValues = (json, id) => {
-			let struct = {...this.state.obj['state2']};
+		addSection = () => {
+			const section = {...this.state.obj}
+			section[`section${this.state.count}`] = {
+					id:0,
+        			name: "third state",
+        			value:"valeur",
+        			status: "text",
+        			type: []
+			};
+			this.setState({
+				obj: section,
+				count: this.state.count +1
+			})
+		}
+		updateValues = (json, id, section) => {
+			let struct = {...this.state.obj[section]};
 			let k = {...this.state.obj};
 			const name = json["textRef"];
 			const value = json["valueRef"];
@@ -79,8 +80,8 @@ class App extends React.Component {
 			console.log(result);
 
 		}
-		updateStructure = (json, id) => {
-			let struct = {...this.state.obj['state2']};
+		updateStructure = (json, id, section) => {
+			let struct = {...this.state.obj[section]};
 			let k = {...this.state.obj};
 			const name = json["textRef"];
 			const value = json["valueRef"];
@@ -132,8 +133,8 @@ class App extends React.Component {
 			 this.setState({obj:k})
 
 		}
-		addStructure = (json, id) => {
-			let struct = {...this.state.obj['state2']};
+		addStructure = (json, id, section) => {
+			let struct = {...this.state.obj[section]};
 			let k = {...this.state.obj};
 			const name = json["textRef"];
 			const value = json["valueRef"];
@@ -166,8 +167,8 @@ class App extends React.Component {
 				case 'array':
 				result.type.push({
 					id:parseInt(id) +1 ,
-        			name: name,
-        			value:"valeur",
+        			name: undefined,
+        			value:undefined,
         			status: "text",
         			type:""
 				});
@@ -190,6 +191,7 @@ class App extends React.Component {
 							<Form
 								key={i}
 								type={this.state.obj[data]}
+								section={data}
 								updateStructure={this.updateStructure}
 								updateValues={this.updateValues}
 								addStructure={this.addStructure}
@@ -197,6 +199,7 @@ class App extends React.Component {
 							)
 					})}
 				</ul>
+				<button onClick={this.addSection}>Add new</button>
 			</div>
 					
 			)

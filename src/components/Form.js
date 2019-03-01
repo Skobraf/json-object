@@ -14,7 +14,7 @@ class Form extends React.Component {
 			textRef: this.textRef.current.value,
 			valueRef:this.valueRef.current.value
 		}
-		this.props.addStructure(json,this.props.type.id)
+		this.props.addStructure(json,this.props.type.id, this.props.section)
 	}
 	handleValues = () => {
 		const json = {
@@ -22,7 +22,7 @@ class Form extends React.Component {
 			textRef: this.textRef.current.value,
 			valueRef:this.valueRef.current.value
 		}
-		this.props.updateValues(json,this.props.type.id)
+		this.props.updateValues(json,this.props.type.id, this.props.section)
 	}
 	toggleVisibility = () => {
 		const json = {
@@ -35,7 +35,8 @@ class Form extends React.Component {
 			this.visible = true;
 		}
 		else {this.visible = false;}
-		this.props.updateStructure(json,this.props.type.id)
+		this.props.updateStructure(json,this.props.type.id, this.props.section)
+		console.log(this.props.section)
 		}
 
 		
@@ -47,7 +48,7 @@ class Form extends React.Component {
 				<div>
 					<li onClick={this.showVisible}>
 						<form onSubmit={this.handleData}>
-						<input type="text" placeholder="Text" ref={this.textRef} onChange={this.handleValues} />
+						<input  placeholder={this.props.type.name} ref={this.textRef} onChange={this.handleValues} />
 						<select name="valeur"  ref={this.statusRef} onChange={this.toggleVisibility}>
 							<option value="text">text</option>
 							<option value="boolean">Boolean</option>
@@ -56,7 +57,7 @@ class Form extends React.Component {
 							<option value="array">Array</option>
 							<option value="date">Date</option>
 						</select>
-						<input type="text" placeholder="Value" ref={this.valueRef}  style={{display: this.visible ? 'none' : 'inline-block'}} onChange={this.handleValues} />
+						<input type="text" placeholder="Value"  ref={this.valueRef}  style={{display: this.visible ? 'none' : 'inline-block'}} onChange={this.handleValues} />
 						<button style={{display: this.visible ? 'inline-block' : 'none'}} type="submit">Add</button>
 					</form>
 					</li>
@@ -67,6 +68,7 @@ class Form extends React.Component {
 									key={i}
 									type={data}
 									updateStructure={this.props.updateStructure}
+									section={this.props.section}
 									updateValues={this.props.updateValues}
 									addStructure={this.props.addStructure}
 									index={i}
@@ -81,7 +83,7 @@ class Form extends React.Component {
 			return (
 				<li onClick={this.showVisible}>
 						<form onSubmit={this.handleValues}>
-						<input type="text" placeholder="Text" ref={this.textRef} onChange={this.handleValues} />
+						<input type="text" placeholder={this.props.type.name} ref={this.textRef} onChange={this.handleValues} />
 						<select name="valeur"  ref={this.statusRef} onChange={this.toggleVisibility}>
 							<option value="text">text</option>
 							<option value="boolean">Boolean</option>
@@ -90,7 +92,7 @@ class Form extends React.Component {
 							<option value="array">Array</option>
 							<option value="date">Date</option>
 						</select>
-						<input type="text" placeholder="Value" ref={this.valueRef}  style={{display: this.visible ? 'none' : 'inline-block'}} onChange={this.handleValues} />
+						<input type="text" placeholder={this.props.type.value}  ref={this.valueRef}  style={{display: this.visible ? 'none' : 'inline-block'}} onChange={this.handleValues} />
 						<button style={{display: this.visible ? 'inline-block' : 'none'}} type="submit">Add</button>
 					</form>
 					</li>
