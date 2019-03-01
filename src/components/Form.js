@@ -80,7 +80,7 @@ class Form extends React.Component {
 		} else
 			return (
 				<li onClick={this.showVisible}>
-						<form onSubmit={this.showMe}>
+						<form onSubmit={this.handleValues}>
 						<input type="text" placeholder="Text" ref={this.textRef} onChange={this.handleValues} />
 						<select name="valeur"  ref={this.statusRef} onChange={this.toggleVisibility}>
 							<option value="text">text</option>

@@ -128,8 +128,8 @@ class App extends React.Component {
 				break;
 				default :
 			}
-			console.log(result);
-			// this.setState({obj:k})
+			console.log(this.state);
+			 this.setState({obj:k})
 
 		}
 		addStructure = (json, id) => {
@@ -149,9 +149,9 @@ class App extends React.Component {
 				    {
 				        for(let prop in theObject) {
 				          /*THE KEY YOU WANT TO LOOK FOR*/
-				            if(prop == 'id') {
+				            if(prop === 'id') {
 				              /* INDEX IS THE VALUE YOU WANT TO ACCESS */
-				                if(theObject[prop] == id) {
+				                if(theObject[prop] === id) {
 				                    return theObject;
 				                }
 				            }
@@ -165,8 +165,8 @@ class App extends React.Component {
 			switch(status) {
 				case 'array':
 				result.type.push({
-					id:id +1 ,
-        			name: "third state",
+					id:parseInt(id) +1 ,
+        			name: name,
         			value:"valeur",
         			status: "text",
         			type:""
@@ -177,8 +177,8 @@ class App extends React.Component {
 				break;
 				default :
 			}
-			console.log(result);
-			// this.setState({obj:k})
+			console.log(this.state);
+			 this.setState({obj:k})
 		}
 
 	render() {
